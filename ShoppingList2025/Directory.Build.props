@@ -1,0 +1,8 @@
+<Project>
+    <PropertyGroup>
+        <Copyright>Copyright&#169; 2025 by Uwe Reisewitz</Copyright>
+        <Product>ShoppingList2025</Product>
+        <AssemblyVersion>1.0.0.1</AssemblyVersion>
+        <FileVersion>1.0.0.001</FileVersion>
+    </PropertyGroup>
+</Project>
