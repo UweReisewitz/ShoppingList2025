@@ -1,4 +1,4 @@
-using ShoppingList2025.Web.Components;
+using ShoppingList2025.Blazor.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
