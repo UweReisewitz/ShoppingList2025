@@ -40,7 +40,6 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='net9.0-ios'">
@@ -86,15 +85,6 @@
     <ProjectReference Include="..\..\Database\ShoppingList2025.Database.Types\ShoppingList2025.Database.Types.csproj" />
     <ProjectReference Include="..\..\Database\ShoppingList2025.Database\ShoppingList2025.Database.csproj" />
     <ProjectReference Include="..\ShoppingList2025.Shared\ShoppingList2025.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Platforms\iOS\PlatformSpecialFolder.cs">
-      <ExcludeFromCurrentConfiguration>true</ExcludeFromCurrentConfiguration>
-    </Compile>
-    <Compile Update="Platforms\Windows\PlatformSpecialFolder.cs">
-      <ExcludeFromCurrentConfiguration>false</ExcludeFromCurrentConfiguration>
-    </Compile>
   </ItemGroup>
 
 </Project>

@@ -6,10 +6,10 @@
              x:Class="ShoppingList2025.MainPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
-    <local:ApplicationBlazorWebView x:Name="BlazorWebView" HostPage="wwwroot/index.html">
-        <BlazorWebView.RootComponents>
+    <local:ApplicationBlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
+        <local:ApplicationBlazorWebView.RootComponents>
             <RootComponent Selector="#app" ComponentType="{x:Type shared:Routes}" />
-        </BlazorWebView.RootComponents>
+        </local:ApplicationBlazorWebView.RootComponents>
     </local:ApplicationBlazorWebView>
 
 </ContentPage>
