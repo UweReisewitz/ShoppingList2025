@@ -16,10 +16,8 @@ namespace ShoppingList2025.Database
 
         public async Task CreateOrMigrateDatabaseAsync()
         {
-            using (var dbContext = new LocalDbContext(platformSpecialFolder))
-            {
-                await dbContext.CreateOrMigrateDatabaseAsync();
-            }
+            using var dbContext = new LocalDbContext(platformSpecialFolder);
+            await dbContext.CreateOrMigrateDatabaseAsync();
         }
 
         public void SaveChanges() => this.localContext.SaveChanges();

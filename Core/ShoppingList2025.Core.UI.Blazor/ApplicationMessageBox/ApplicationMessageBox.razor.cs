@@ -17,18 +17,13 @@ public partial class ApplicationMessageBox
 
     private string IconColorStyle()
     {
-        switch (parameter.Symbol)
+        return this.parameter.Symbol switch
         {
-            case ApplicationMessageBoxSymbol.Exclamation:
-                return "color: gold;";
-            case ApplicationMessageBoxSymbol.Stop:
-                return "color: red;";
-            case ApplicationMessageBoxSymbol.Question:
-                return "color: black;";
-            case ApplicationMessageBoxSymbol.Information:
-                return "color: blue;";
-            default:
-                return "color: black;";
-        }
+            ApplicationMessageBoxSymbol.Exclamation => "color: gold;",
+            ApplicationMessageBoxSymbol.Stop => "color: red;",
+            ApplicationMessageBoxSymbol.Question => "color: black;",
+            ApplicationMessageBoxSymbol.Information => "color: blue;",
+            _ => "color: black;",
+        };
     }
 }

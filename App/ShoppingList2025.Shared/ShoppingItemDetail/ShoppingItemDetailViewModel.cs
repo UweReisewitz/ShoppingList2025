@@ -73,7 +73,7 @@ public class ShoppingItemDetailViewModel(IBlazorNavigationService navigationServ
 
             var applicationMediaPickerOptions = new ApplicationMediaPickerOptions
             {
-                Title = mainAssembly.ProductName
+                Title = mainAssembly.ProductName,                
             };
             var fileName = await applicationMediaPicker.CapturePhotoAsync(applicationMediaPickerOptions);
 

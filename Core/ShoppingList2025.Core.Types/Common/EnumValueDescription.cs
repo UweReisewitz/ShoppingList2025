@@ -32,9 +32,7 @@ public class EnumValueDescription(Enum enumvalue, string description)
 
     public static bool operator ==(EnumValueDescription obj1, EnumValueDescription obj2)
     {
-        return ReferenceEquals(obj1, obj2)
-            ? true 
-            : obj1 is not null && obj1.Equals(obj2);
+        return ReferenceEquals(obj1, obj2) || obj1 is not null && obj1.Equals(obj2);
     }
 
     public static bool operator !=(EnumValueDescription obj1, EnumValueDescription obj2)

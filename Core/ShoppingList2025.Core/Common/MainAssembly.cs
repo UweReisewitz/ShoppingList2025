@@ -146,7 +146,7 @@ public class MainAssembly : IMainAssembly
         {
             return string.Empty;
         }
-        var attribute = (T?)CustomAttributeExtensions.GetCustomAttribute(this.EntryAssembly, typeof(T));
+        var attribute = CustomAttributeExtensions.GetCustomAttribute<T>(this.EntryAssembly);
         return attribute == null
             ? string.Empty
             : value.Invoke(attribute);
