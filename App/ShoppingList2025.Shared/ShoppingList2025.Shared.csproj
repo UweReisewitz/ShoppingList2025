@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="HomePage\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
