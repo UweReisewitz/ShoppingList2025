@@ -1,16 +1,15 @@
 ﻿using System.Collections.ObjectModel;
-using AsyncAwaitBestPractices.MVVM;
 using ShoppingList2025.Core.UI.Blazor;
 
 namespace ShoppingList2025.Shared;
 
 public interface IHomePageViewModel : IBlazorViewModelBase
 {
-    AsyncCommand AddItemCommand { get; }
+    Task AddItemAsync();
     ObservableCollection<UIShoppingItem> Items { get; }
-    AsyncCommand<UIShoppingItem> ItemTapped { get; }
-    AsyncCommand LoadItemsCommand { get; }
+    Task SelectItemAsync(UIShoppingItem shoppingItem);
+    Task LoadItemsAsync();
     UIShoppingItem? SelectedItem { get; set; }
-    AsyncCommand<UIShoppingItem> SetItemBought { get; }
-    AsyncCommand ShoppingDoneCommand { get; }
+    Task SetItemBoughtAsync(UIShoppingItem shoppingItem);
+    Task ShoppingDoneAsync();
 }

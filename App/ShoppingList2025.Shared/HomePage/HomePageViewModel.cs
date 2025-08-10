@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using AsyncAwaitBestPractices;
-using AsyncAwaitBestPractices.MVVM;
 using Microsoft.Extensions.Logging;
 using Prism.Common;
 using PropertyChanged;
@@ -12,68 +11,40 @@ using ShoppingList2025.Database.Types;
 namespace ShoppingList2025.Shared;
 
 [AddINotifyPropertyChangedInterface]
-public class HomePageViewModel : BlazorViewModelBase, IHomePageViewModel
+public class HomePageViewModel(IBlazorNavigationService navigationService,
+                               IDbService dbService,
+                               ILogger logger,
+                               IApplicationMessageBoxFrontend messageBoxFrontend)
+    : BlazorViewModelBase(), IHomePageViewModel
 {
-    private readonly IDbService dbService;
-    private readonly IBlazorNavigationService navigationService;
-    private readonly ILogger logger;
-    private readonly IApplicationMessageBoxFrontend messageBoxFrontend;
     private bool isDatabaseMigrated;
 
-    public HomePageViewModel(IBlazorNavigationService navigationService,
-                             IDbService dbService,
-                             ILogger logger,
-                             IApplicationMessageBoxFrontend messageBoxFrontend)
-        : base()
+    public async Task ShoppingDoneAsync()
     {
-        this.dbService = dbService;
-
-        this.Items = [];
-        this.LoadItemsCommand = new AsyncCommand(this.ExecuteLoadItemsCommandAsync);
-
-        this.SetItemBought = new AsyncCommand<UIShoppingItem>(this.SetItemBoughtAsync);
-        this.ItemTapped = new AsyncCommand<UIShoppingItem>(this.OnItemSelectedAsync);
-
-        this.AddItemCommand = new AsyncCommand(this.OnAddItemAsync);
-        this.ShoppingDoneCommand = new AsyncCommand(this.ShoppingDoneCommandAsync);
-        this.navigationService = navigationService;
-        this.logger = logger;
-        this.messageBoxFrontend = messageBoxFrontend;
+        await dbService.EndShoppingAsync();
+        await this.LoadItemsAsync();
     }
 
-    public AsyncCommand ShoppingDoneCommand { get; }
-    private async Task ShoppingDoneCommandAsync()
-    {
-        await this.dbService.EndShoppingAsync();
-        await this.ExecuteLoadItemsCommandAsync();
-    }
-
-
-    public AsyncCommand<UIShoppingItem> SetItemBought { get; }
-    private async Task SetItemBoughtAsync(UIShoppingItem? item)
+    public async Task SetItemBoughtAsync(UIShoppingItem? item)
     {
         if (item != null && item.State == ShoppingItemState.Open)
         {
             item.State = ShoppingItemState.Bought;
             item.LastBought = DateTime.Now;
-            await this.dbService.SaveChangesAsync();
+            await dbService.SaveChangesAsync();
         }
     }
 
 
-    public ObservableCollection<UIShoppingItem> Items { get; private set; }
-    public AsyncCommand LoadItemsCommand { get; }
-    public AsyncCommand AddItemCommand { get; }
-    public AsyncCommand<UIShoppingItem> ItemTapped { get; }
-
-    private async Task ExecuteLoadItemsCommandAsync()
+    public ObservableCollection<UIShoppingItem> Items { get; private set; } = [];
+    public async Task LoadItemsAsync()
     {
         this.IsBusy = true;
 
         try
         {
             this.Items.Clear();
-            var items = await this.dbService.GetShoppingListItemsAsync();
+            var items = await dbService.GetShoppingListItemsAsync();
 
             foreach (var item in items.OrderBy(i => i.State).ThenBy(i => i.Name))
             {
@@ -82,8 +53,8 @@ public class HomePageViewModel : BlazorViewModelBase, IHomePageViewModel
         }
         catch (Exception ex)
         {
-            this.logger.LogError(ex, "ExecuteLoadItemsCommandAsync");
-            await this.messageBoxFrontend.ShowErrorMessageAsync("ExecuteLoadItemsCommandAsync", $"Exception aufgetreten:\n{ex.GetType()}\n{ex.Message}");
+            logger.LogError(ex, nameof(LoadItemsAsync));
+            await messageBoxFrontend.ShowErrorMessageAsync(nameof(LoadItemsAsync), $"Exception aufgetreten:\n{ex.GetType()}\n{ex.Message}");
         }
         finally
         {
@@ -95,19 +66,19 @@ public class HomePageViewModel : BlazorViewModelBase, IHomePageViewModel
     public UIShoppingItem? SelectedItem
     {
         get => this.selectedItem;
-        set => this.OnItemSelectedAsync(value).SafeFireAndForget();
+        set => this.SelectItemAsync(value).SafeFireAndForget();
     }
 
-    private async Task OnAddItemAsync()
+    public async Task AddItemAsync()
     {
-        var dbShoppingItem = this.dbService.CreateShoppingItem();
-        await this.dbService.AddShoppingItemAsync(dbShoppingItem);
+        var dbShoppingItem = dbService.CreateShoppingItem();
+        await dbService.AddShoppingItemAsync(dbShoppingItem);
         var uiShoppingItem = new UIShoppingItem(dbShoppingItem, true);
 
         await this.NavigateToDetailPageAsync(uiShoppingItem);
     }
 
-    private async Task OnItemSelectedAsync(UIShoppingItem? item)
+    public async Task SelectItemAsync(UIShoppingItem? item)
     {
         this.selectedItem = item;
         if (item != null)
@@ -124,13 +95,13 @@ public class HomePageViewModel : BlazorViewModelBase, IHomePageViewModel
             };
 
         // This will push the ShoppingItemDetailPage onto the navigation stack
-        this.navigationService.NavigateTo<IShoppingItemDetailViewModel>(parameters);
+        navigationService.NavigateTo<IShoppingItemDetailViewModel>(parameters);
         return Task.CompletedTask;
     }
 
     public override async Task OnNavigatedToAsync(IParameters? parameters = null)
     {
-        await this.ExecuteLoadItemsCommandAsync();
+        await this.LoadItemsAsync();
     }
 
     public override async Task OnInitializedAsync()
@@ -139,7 +110,7 @@ public class HomePageViewModel : BlazorViewModelBase, IHomePageViewModel
 
         if (!this.isDatabaseMigrated)
         {
-            await this.dbService.CreateOrMigrateDatabaseAsync();
+            await dbService.CreateOrMigrateDatabaseAsync();
             this.isDatabaseMigrated = true;
         }
     }

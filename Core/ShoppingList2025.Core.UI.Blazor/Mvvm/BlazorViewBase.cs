@@ -23,19 +23,6 @@ public abstract class BlazorViewBase<T> : ComponentBase, IBlazorViewInvokeAsync,
     [Inject]
     public required IJSRuntime JSRuntime { get; set; }
 
-    protected void EventToCommand(ICommand command)
-    {
-        this.EventToCommand<object>(command, EventArgs.Empty);
-    }
-
-    protected void EventToCommand<EA>(ICommand command, EA eventArgs)
-    {
-        if (command != null && command.CanExecute(eventArgs))
-        {
-            command.Execute(eventArgs);
-        }
-    }
-
     /// <summary>
     /// Binding data context.
     /// </summary>

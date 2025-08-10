@@ -7,18 +7,9 @@ using ShoppingList2025.Core.Types;
 namespace ShoppingList2025.Core.UI.Blazor;
 
 [AddINotifyPropertyChangedInterface]
-public class ApplicationMessageBoxViewModel : BlazorDialogViewModelBase, IApplicationMessageBoxViewModel, IDisposable
+public class ApplicationMessageBoxViewModel(IMainAssembly mainAssembly) 
+    : BlazorDialogViewModelBase(), IApplicationMessageBoxViewModel, IDisposable
 {
-    public ApplicationMessageBoxViewModel(IMainAssembly mainAssembly)
-        : base()
-    {
-        this.MessageBoxButtonCommand = new AsyncCommand<ApplicationMessageBoxButtons>(this.MessageBoxButtonCommandAsync);
-
-        this.Title = mainAssembly.ProductName;
-
-        this.MessageBoxButtonItems = [];
-    }
-
     public virtual Task InitializeAsync(IApplicationMessageBoxParameter parameter)
     {
         this.Title = parameter.Title;
@@ -84,16 +75,14 @@ public class ApplicationMessageBoxViewModel : BlazorDialogViewModelBase, IApplic
         buttons.Add(item);
     }
 
-    public string Title { get; private set; }
+    public string Title { get; private set; } = mainAssembly.ProductName;
     public string Prompt { get; private set; } = string.Empty;
     public bool IsIconVisible { get; private set; }
     public int RemainingTime { get; private set; }
 
-    public ObservableCollection<ApplicationMessageBoxButtonItem> MessageBoxButtonItems { get; private set; }
+    public ObservableCollection<ApplicationMessageBoxButtonItem> MessageBoxButtonItems { get; private set; } = [];
 
-    public IAsyncCommand<ApplicationMessageBoxButtons> MessageBoxButtonCommand { get; private set; }
-
-    private Task MessageBoxButtonCommandAsync(ApplicationMessageBoxButtons item)
+    public Task PerformMessageBoxButtonAsync(ApplicationMessageBoxButtons item)
     {
         return this.CloseDialogAsync(item);
     }

@@ -8,15 +8,15 @@
 
 @* <MudPaper class="align-content-end">
  *@    <MudToolBar>
-    <MudIconButton Icon="@Icons.Material.Outlined.Check" OnClick="()=>this.EventToCommand(this.ViewModel.ShoppingDoneCommand)" />
-    <MudIconButton Icon="@Icons.Material.Outlined.Add" OnClick="()=>this.EventToCommand(this.ViewModel.AddItemCommand)" />
+    <MudIconButton Icon="@Icons.Material.Outlined.Check" OnClick="this.ViewModel.ShoppingDoneAsync" />
+    <MudIconButton Icon="@Icons.Material.Outlined.Add" OnClick="this.ViewModel.AddItemAsync" />
 </MudToolBar>
 @* </MudPaper> *@
 
 @foreach (var item in this.ViewModel.Items)
 {
     <MudGrid Style="@GetBackgroundStyle(item)">
-        <MudItem xs="12" Class="ma-4" onclick="@(()=>this.EventToCommand<UIShoppingItem>(this.ViewModel.ItemTapped, item))">
+        <MudItem xs="12" Class="ma-4" @onclick="()=>this.ViewModel.SelectItemAsync(item)">
             <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
                 <MudItem xs="6" sm="3">
                     <MudStack>
@@ -38,7 +38,7 @@
                 </MudItem>
                 <MudItem xs="6" sm="3">
                     <MudStack>
-                        <MudButton Disabled="@(!item.IsOpen)" Variant="Variant.Filled" Color="Color.Primary" OnClick="()=>this.EventToCommand<UIShoppingItem>(this.ViewModel.SetItemBought,item)">Gekauft</MudButton>
+                        <MudButton Disabled="@(!item.IsOpen)" Variant="Variant.Filled" Color="Color.Primary" OnClick="() => this.ViewModel.SetItemBoughtAsync(item)">Gekauft</MudButton>
                     </MudStack>
                 </MudItem>
             </MudStack>

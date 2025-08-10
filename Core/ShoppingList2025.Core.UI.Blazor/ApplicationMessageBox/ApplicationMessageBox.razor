@@ -15,7 +15,7 @@
     <DialogActions>
         @foreach (var buttonItem in this.ViewModel.MessageBoxButtonItems)
         {
-            <MudButton OnClick="()=>EventToCommand<ApplicationMessageBoxButtons>(this.ViewModel.MessageBoxButtonCommand, buttonItem.ButtonType)">@buttonItem.Text</MudButton>
+            <MudButton OnClick="()=>this.ViewModel.PerformMessageBoxButtonAsync(buttonItem.ButtonType)">@buttonItem.Text</MudButton>
         }
     </DialogActions>
 </MudDialog>

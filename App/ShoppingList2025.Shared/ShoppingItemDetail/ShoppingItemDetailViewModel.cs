@@ -1,5 +1,4 @@
-﻿using AsyncAwaitBestPractices.MVVM;
-using AutoMapper;
+﻿using AutoMapper;
 using Prism.Common;
 using PropertyChanged;
 using ShoppingList2025.Core.Types;
@@ -9,34 +8,14 @@ using ShoppingList2025.Database.Types;
 namespace ShoppingList2025.Shared;
 
 [AddINotifyPropertyChangedInterface]
-public class ShoppingItemDetailViewModel : BlazorViewModelBase, IShoppingItemDetailViewModel
+public class ShoppingItemDetailViewModel(IBlazorNavigationService navigationService,
+                                         IMainAssembly mainAssembly,
+                                         IMapper mapper,
+                                         IApplicationMediaPicker applicationMediaPicker,
+                                         IDbService dbService) 
+    : BlazorViewModelBase(), IShoppingItemDetailViewModel
 {
-    private readonly IBlazorNavigationService navigationService;
-    private readonly IMainAssembly mainAssembly;
-    private readonly IMapper mapper;
-    private readonly IApplicationMediaPicker applicationMediaPicker;
-    private readonly IDbService dbService;
-
     private UIShoppingItem? uiShoppingItem;
-
-    public ShoppingItemDetailViewModel(IBlazorNavigationService navigationService,
-                                       IMainAssembly mainAssembly,
-                                       IMapper mapper,
-                                       IApplicationMediaPicker applicationMediaPicker,
-                                       IDbService dbService)
-        : base()
-    {
-        this.navigationService = navigationService;
-        this.mainAssembly = mainAssembly;
-        this.mapper = mapper;
-        this.applicationMediaPicker = applicationMediaPicker;
-        this.dbService = dbService;
-
-        this.UpdateSuggestedNames = new AsyncCommand<string>(this.PerformUpdateSuggestedNamesAsync);
-        this.GotoHomePageCommand = new AsyncCommand(this.GotoHomePageAsync);
-        this.TakePhotoCommand = new AsyncCommand(this.TakePhotoAsync);
-        this.PickPhotoCommand = new AsyncCommand(this.PickPhotoAsync);
-    }
 
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
@@ -71,25 +50,22 @@ public class ShoppingItemDetailViewModel : BlazorViewModelBase, IShoppingItemDet
     public DateTime LastBought { get; set; }
 
 
-    public AsyncCommand<string> UpdateSuggestedNames { get; }
-    private async Task PerformUpdateSuggestedNamesAsync(string? value)
+    public async Task UpdateSuggestedNamesAsync(string? value)
     {
         this.SuggestedNames = value != null
-            ? await this.dbService.GetSuggestedNamesAsync(value)
+            ? await dbService.GetSuggestedNamesAsync(value)
             : [];
     }
 
     public List<string> SuggestedNames { get; private set; } = [];
 
-    public AsyncCommand GotoHomePageCommand { get; set; }
-    private async Task GotoHomePageAsync()
+    public async Task GotoHomePageAsync()
     {
         await this.SaveItemDataAsync();
-        this.navigationService.NavigateTo<IHomePageViewModel>();
+        navigationService.NavigateTo<IHomePageViewModel>();
     }
 
-    public AsyncCommand TakePhotoCommand { get; }
-    private async Task TakePhotoAsync()
+    public async Task TakePhotoAsync()
     {
         if (!this.IsBusy)
         {
@@ -97,9 +73,9 @@ public class ShoppingItemDetailViewModel : BlazorViewModelBase, IShoppingItemDet
 
             var applicationMediaPickerOptions = new ApplicationMediaPickerOptions
             {
-                Title = this.mainAssembly.ProductName
+                Title = mainAssembly.ProductName
             };
-            var fileName = await this.applicationMediaPicker.CapturePhotoAsync(applicationMediaPickerOptions);
+            var fileName = await applicationMediaPicker.CapturePhotoAsync(applicationMediaPickerOptions);
 
             if (string.IsNullOrEmpty(fileName))
             {
@@ -112,18 +88,16 @@ public class ShoppingItemDetailViewModel : BlazorViewModelBase, IShoppingItemDet
         }
     }
 
-    public AsyncCommand PickPhotoCommand { get; }
-
-    private async Task PickPhotoAsync()
+    public async Task PickPhotoAsync()
     {
         if (!this.IsBusy)
         {
             this.IsBusy = true;
             var applicationMediaPickerOptions = new ApplicationMediaPickerOptions
             {
-                Title = this.mainAssembly.ProductName
+                Title = mainAssembly.ProductName
             };
-            var fileName = await this.applicationMediaPicker.PickPhotoAsync(applicationMediaPickerOptions);
+            var fileName = await applicationMediaPicker.PickPhotoAsync(applicationMediaPickerOptions);
 
             if (fileName == null)
             {
@@ -159,7 +133,7 @@ public class ShoppingItemDetailViewModel : BlazorViewModelBase, IShoppingItemDet
         ArgumentNullException.ThrowIfNull(parameters);
 
         this.uiShoppingItem = (UIShoppingItem)parameters["Item"];
-        this.mapper.Map(this.uiShoppingItem, this);
+        mapper.Map(this.uiShoppingItem, this);
 
         return base.OnNavigatedToAsync(parameters);
     }
@@ -169,24 +143,24 @@ public class ShoppingItemDetailViewModel : BlazorViewModelBase, IShoppingItemDet
         var currentShoppingItem = this.GetShoppingItemOrThrow();
         if (string.IsNullOrWhiteSpace(this.Name) && currentShoppingItem.IsNewShoppingItem)
         {
-            this.dbService.RemoveShoppingItem(currentShoppingItem.DbShoppingItem);
+            dbService.RemoveShoppingItem(currentShoppingItem.DbShoppingItem);
         }
         else
         {
-            var oldItem = this.dbService.FindShoppingItem(this.Name);
+            var oldItem = dbService.FindShoppingItem(this.Name);
             if (oldItem != null && oldItem.Id != this.Id)
             {
                 if (currentShoppingItem.IsNewShoppingItem)
                 {
-                    this.dbService.RemoveShoppingItem(currentShoppingItem.DbShoppingItem);
+                    dbService.RemoveShoppingItem(currentShoppingItem.DbShoppingItem);
                     this.LastBought = oldItem.LastBought;
                     this.ImageData = oldItem.ImageData ?? [];
                 }
                 this.uiShoppingItem = new UIShoppingItem(oldItem);
                 this.Id = this.uiShoppingItem.Id;
             }
-            this.mapper.Map(this, this.uiShoppingItem);
-            await this.dbService.SaveChangesAsync();
+            mapper.Map(this, this.uiShoppingItem);
+            await dbService.SaveChangesAsync();
         }
     }
 

@@ -16,11 +16,11 @@ namespace ShoppingList2025.Shared
         bool IsLastBoughtVisible { get; }
         DateTime LastBought { get; set; }
         string Name { get; set; }
-        AsyncCommand PickPhotoCommand { get; }
+        Task PickPhotoAsync();
         ShoppingItemState State { get; set; }
         List<string> SuggestedNames { get; }
-        AsyncCommand GotoHomePageCommand { get; }
-        AsyncCommand TakePhotoCommand { get; }
-        AsyncCommand<string> UpdateSuggestedNames { get; }
+        Task GotoHomePageAsync();
+        Task TakePhotoAsync();
+        Task UpdateSuggestedNamesAsync(string name);
     }
 }

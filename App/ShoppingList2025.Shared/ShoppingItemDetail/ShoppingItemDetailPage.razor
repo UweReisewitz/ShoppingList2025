@@ -9,9 +9,9 @@
 
 <MudPaper class="align-end" Elevation="25">
     <MudToolBar>
-        <MudIconButton Icon="@Icons.Material.Outlined.ArrowBack" OnClick="()=>this.EventToCommand(this.ViewModel.GotoHomePageCommand)" />
-        <MudIconButton Icon="@Icons.Material.Outlined.CameraAlt" OnClick="()=>this.EventToCommand(this.ViewModel.TakePhotoCommand)" />
-        <MudIconButton Icon="@Icons.Material.Outlined.PhotoLibrary" OnClick="()=>this.EventToCommand(this.ViewModel.PickPhotoCommand)" />
+        <MudIconButton Icon="@Icons.Material.Outlined.ArrowBack" OnClick="this.ViewModel.GotoHomePageAsync" />
+        <MudIconButton Icon="@Icons.Material.Outlined.CameraAlt" OnClick="this.ViewModel.TakePhotoAsync" />
+        <MudIconButton Icon="@Icons.Material.Outlined.PhotoLibrary" OnClick="this.ViewModel.PickPhotoAsync" />
     </MudToolBar>
 </MudPaper>
 
