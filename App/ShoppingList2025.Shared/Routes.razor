@@ -1,0 +1,28 @@
+﻿@using ShoppingList2025.Core.UI.Blazor
+@using ShoppingList2025.Shared
+
+@namespace ShoppingList2025.Shared
+
+<ErrorBoundary>
+    <ChildContent>
+        <Router AppAssembly="@typeof(MainLayout).Assembly"
+                AdditionalAssemblies="AssemblyList.AdditionalAssemblies">
+            <Found Context="routeData">
+                <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            </Found>
+            <NotFound>
+                <PageTitle>Not found</PageTitle>
+                <LayoutView Layout="@typeof(MainLayout)">
+                    <p role="alert">Sorry, there's nothing at this address.</p>
+                </LayoutView>
+            </NotFound>
+        </Router>
+    </ChildContent>
+
+    <ErrorContent>
+        @{
+            this.ProcessException(context);
+        }
+        <FinalExceptionPage />
+    </ErrorContent>
+</ErrorBoundary>

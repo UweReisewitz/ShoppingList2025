@@ -1,0 +1,36 @@
+﻿@using MudBlazor
+@using ShoppingList2025.Core.Types
+@using ShoppingList2025.Core.UI.Types
+
+@namespace ShoppingList2025.Core.UI.Blazor
+
+@inject IMainAssembly mainAssembly
+
+
+<MudGrid>
+    <MudItem xs="12" Class="ma-4">
+        <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+            <MudItem xs="6" sm="3">
+                <MudStack>
+                    @* Source: https://pixabay.com/de/illustrations/traurig-weinen-tr%C3%A4ne-emotion-1533965/ *@
+                    <MudImage Fluid="true" Src="_content/ShoppingList2025.Core.UI.Blazor/Images/sadsmiley.jpg" />
+                </MudStack>
+            </MudItem>
+            <MudItem xs="6" sm="3">
+                <MudStack Justify="Justify.FlexStart">
+                    <MudItem>
+                        <MudText Typo="Typo.h2">@($"{mainAssembly.ProductName} {mainAssembly.ProductVersion}")</MudText>
+                    </MudItem>
+                    <MudItem>
+                        <MudText Typo="Typo.h4">Es ist ein Fehler aufgetreten und die Applikation wurde beendet</MudText>
+                    </MudItem>
+                </MudStack>
+            </MudItem>
+        </MudStack>
+        <MudItem xs="6" sm="3">
+            <MudStack>
+                <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="this.CloseApplication">@this.buttonText</MudButton>
+            </MudStack>
+        </MudItem>
+    </MudItem>
+</MudGrid>

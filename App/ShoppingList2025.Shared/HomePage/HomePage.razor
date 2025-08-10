@@ -1,0 +1,47 @@
+﻿@page "/"
+@using MudBlazor
+@using ShoppingList2025.Core.UI.Blazor
+
+@namespace ShoppingList2025.Shared
+
+@inherits BlazorViewBase<IHomePageViewModel>
+
+@* <MudPaper class="align-content-end">
+ *@    <MudToolBar>
+    <MudIconButton Icon="@Icons.Material.Outlined.Check" OnClick="()=>this.EventToCommand(this.ViewModel.ShoppingDoneCommand)" />
+    <MudIconButton Icon="@Icons.Material.Outlined.Add" OnClick="()=>this.EventToCommand(this.ViewModel.AddItemCommand)" />
+</MudToolBar>
+@* </MudPaper> *@
+
+@foreach (var item in this.ViewModel.Items)
+{
+    <MudGrid Style="@GetBackgroundStyle(item)">
+        <MudItem xs="12" Class="ma-4" onclick="@(()=>this.EventToCommand<UIShoppingItem>(this.ViewModel.ItemTapped, item))">
+            <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                <MudItem xs="6" sm="3">
+                    <MudStack>
+                        <MudImage Fluid="true" Src="@item.ImageDataUrl" Width="100" />
+                    </MudStack>
+                </MudItem>
+                <MudItem xs="6" sm="3">
+                    <MudStack Justify="Justify.FlexStart">
+                        <MudItem>
+                            <MudText Typo="Typo.h6">@item.Name</MudText>
+                        </MudItem>
+                        <MudItem>
+                            <MudStack Row="true">
+                                <MudText Typo="Typo.caption">Status: </MudText>
+                                <MudText Typo="Typo.caption">@item.StateText</MudText>
+                            </MudStack>
+                        </MudItem>
+                    </MudStack>
+                </MudItem>
+                <MudItem xs="6" sm="3">
+                    <MudStack>
+                        <MudButton Disabled="@(!item.IsOpen)" Variant="Variant.Filled" Color="Color.Primary" OnClick="()=>this.EventToCommand<UIShoppingItem>(this.ViewModel.SetItemBought,item)">Gekauft</MudButton>
+                    </MudStack>
+                </MudItem>
+            </MudStack>
+        </MudItem>
+    </MudGrid>
+}
