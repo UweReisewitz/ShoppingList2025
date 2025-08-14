@@ -15,7 +15,7 @@
 
 @foreach (var item in this.ViewModel.Items)
 {
-    <MudGrid Style="@GetBackgroundStyle(item)">
+    <MudGrid Style="@GetBackgroundStyle(item)" Spacing="0">
         <MudItem xs="12" Class="ma-4" @onclick="()=>this.ViewModel.SelectItemAsync(item)">
             <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
                 <MudItem xs="6" sm="3">
