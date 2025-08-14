@@ -1,0 +1,49 @@
+﻿@page "/ItemDetail"
+@using MudBlazor
+@using ShoppingList2025.Core.UI.Blazor
+@using ShoppingList2025.Database.Types
+
+@namespace ShoppingList2025.Shared
+
+@inherits BlazorViewBase<IShoppingItemDetailViewModel>
+
+<MudPaper class="align-end" Elevation="25">
+    <MudToolBar>
+        <MudIconButton Icon="@Icons.Material.Outlined.ArrowBack" OnClick="this.ViewModel.GotoHomePageAsync" />
+        <MudIconButton Icon="@Icons.Material.Outlined.CameraAlt" OnClick="this.ViewModel.TakePhotoAsync" />
+        <MudIconButton Icon="@Icons.Material.Outlined.PhotoLibrary" OnClick="this.ViewModel.PickPhotoAsync" />
+    </MudToolBar>
+</MudPaper>
+
+<MudGrid Class="ma-4">
+    <MudItem xs="12" md="12">
+        <MudAutocomplete T="string"
+                         Label="Name"
+                         @bind-Value="this.ViewModel.Name"
+                         CoerceValue="true"
+                         Immediate="true"
+                         SearchFunc="this.GetSuggestedNamesAsync" />
+    </MudItem>
+    <MudItem xs="12" md="12">
+        <MudSelect T="ShoppingItemState"
+                   @bind-Value="this.ViewModel.State">
+
+            @foreach (var itemState in this.ViewModel.ItemStateList)
+            {
+                <MudSelectItem Value="@((ShoppingItemState)itemState.EnumValue)">@itemState.Description</MudSelectItem>
+            }
+        </MudSelect>
+    </MudItem>
+    @if (this.ViewModel.IsLastBoughtVisible)
+    {
+        <MudItem xs="12" md="12">
+            <MudField Label="Zuletzt gekauft am">@this.ViewModel.LastBought.ToString("g")</MudField>
+    </MudItem>
+    }
+    @if (this.ViewModel.IsImageVisible)
+    {
+        <MudItem xs="12" md="12">
+            <MudImage Fluid="true" Src="@this.ViewModel.ImageSource" Width="200" />
+        </MudItem>
+    }
+</MudGrid>

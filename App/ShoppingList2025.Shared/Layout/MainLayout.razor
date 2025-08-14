@@ -1,0 +1,19 @@
+﻿@namespace ShoppingList2025.Shared
+@using MudBlazor
+
+@inherits LayoutComponentBase
+
+<div>
+    <MudThemeProvider />
+    <MudPopoverProvider />
+    <MudDialogProvider />
+    <MudSnackbarProvider />
+    <MudLayout>
+        <MudMainContent>
+            <MudAppBar>
+                ShoppingList 2025
+            </MudAppBar>
+            @Body
+        </MudMainContent>
+    </MudLayout>
+</div>

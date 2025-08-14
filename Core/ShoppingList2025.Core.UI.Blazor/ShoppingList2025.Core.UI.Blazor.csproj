@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+    <PropertyGroup Label="Globals">
+        <SccProjectName></SccProjectName>
+        <SccProvider></SccProvider>
+        <SccAuxPath></SccAuxPath>
+        <SccLocalPath></SccLocalPath>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <SupportedPlatform Include="browser" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="9.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.8" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
+        <PackageReference Include="MudBlazor" Version="8.11.0" />
+        <PackageReference Include="Prism.Core" Version="8.1.97" />
+        <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ShoppingList2025.Core.Types\ShoppingList2025.Core.Types.csproj" />
+      <ProjectReference Include="..\ShoppingList2025.Core.UI.Types\ShoppingList2025.Core.UI.Types.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\css\" />
+      <Folder Include="wwwroot\Images\" />
+      <Folder Include="wwwroot\js\" />
+      <Folder Include="wwwroot\webfonts\" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,21 @@
+﻿@namespace ShoppingList2025.Core.UI.Blazor
+@using MudBlazor
+@using ShoppingList2025.Core.Types;
+
+@inherits BlazorDialogViewBase<IApplicationMessageBoxViewModel>
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">@this.ViewModel.Title</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudText Typo="Typo.body1">@this.ViewModel.Prompt</MudText>
+    </DialogContent>
+
+    <DialogActions>
+        @foreach (var buttonItem in this.ViewModel.MessageBoxButtonItems)
+        {
+            <MudButton OnClick="()=>this.ViewModel.PerformMessageBoxButtonAsync(buttonItem.ButtonType)">@buttonItem.Text</MudButton>
+        }
+    </DialogActions>
+</MudDialog>
