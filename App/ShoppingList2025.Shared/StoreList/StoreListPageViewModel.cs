@@ -6,6 +6,7 @@ using Prism.Common;
 using PropertyChanged;
 using ShoppingList2025.Core.Types;
 using ShoppingList2025.Core.UI.Blazor;
+using ShoppingList2025.Core.UI.Types;
 using ShoppingList2025.Database.Types;
 
 namespace ShoppingList2025.Shared;
@@ -14,9 +15,7 @@ namespace ShoppingList2025.Shared;
 public class StoreListPageViewModel(IBlazorNavigationService navigationService,
                                 ILogger logger,
                                 IApplicationMessageBoxFrontend messageBoxFrontend,
-                                         IMainAssembly mainAssembly,
-                                         IMapper mapper,
-                                         IDbService dbService) 
+                                IDbService dbService)
     : BlazorViewModelBase(), IStoreListPageViewModel
 {
     public ObservableCollection<UIStore> Items { get; private set; } = [];
@@ -40,7 +39,7 @@ public class StoreListPageViewModel(IBlazorNavigationService navigationService,
         await dbService.AddStoreAsync(dbStore);
         var uiStore = new UIStore(dbStore, true);
 
-        //await this.NavigateToDetailPageAsync(uiShoppingItem);
+        await this.NavigateToStoreEditPageAsync(uiStore);
     }
 
     public async Task SelectItemAsync(UIStore? item)
@@ -48,9 +47,22 @@ public class StoreListPageViewModel(IBlazorNavigationService navigationService,
         this.selectedItem = item;
         if (item != null)
         {
-            //await this.NavigateToDetailPageAsync(item);
+            await this.NavigateToStoreEditPageAsync(item);
         }
     }
+
+    private Task NavigateToStoreEditPageAsync(UIStore store)
+    {
+        var parameters = new NavigationParameters
+            {
+                { "Item", store }
+            };
+
+        // This will push the ShoppingItemDetailPage onto the navigation stack
+        navigationService.NavigateTo<IStoreEditViewModel>(parameters);
+        return Task.CompletedTask;
+    }
+
 
     public async Task LoadItemsAsync()
     {
@@ -77,8 +89,9 @@ public class StoreListPageViewModel(IBlazorNavigationService navigationService,
         }
     }
 
-    public async Task GotoHomePageAsync()
+    public Task GotoHomePageAsync()
     {
         navigationService.NavigateTo<IHomePageViewModel>();
+        return Task.CompletedTask;
     }
 }

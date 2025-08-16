@@ -11,6 +11,8 @@ public class ShoppingListMapperConfiguration
         {
             configuration.CreateMap<IShoppingItem, UIShoppingItem>().ReverseMap();
             configuration.CreateMap<UIShoppingItem, ShoppingItemDetailViewModel>().ReverseMap();
+            configuration.CreateMap<IStore, UIStore>().ReverseMap();
+            configuration.CreateMap<UIStore, StoreEditViewModel>().ReverseMap();
         }
         else
         {

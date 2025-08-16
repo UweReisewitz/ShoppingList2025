@@ -1,0 +1,31 @@
+﻿@page "/StoreEdit"
+@using MudBlazor
+@using ShoppingList2025.Core.UI.Blazor
+@using ShoppingList2025.Database.Types
+
+@namespace ShoppingList2025.Shared
+
+@inherits BlazorViewBase<IStoreEditViewModel>
+
+<MudPaper class="align-end" Elevation="25">
+    <MudToolBar>
+        <MudIconButton Icon="@Icons.Material.Outlined.ArrowBack" OnClick="this.ViewModel.GotoListPageAsync" />
+    </MudToolBar>
+</MudPaper>
+
+<MudGrid Class="ma-4">
+    <MudItem xs="12" md="12">
+        <MudInput T="string"
+                  Label="Name"
+                  @bind-Value="this.ViewModel.Name"
+                  CoerceValue="true"
+                  Immediate="true" />
+    </MudItem>
+    <MudItem xs="12" md="12">
+        <MudInput T="string"
+                  Label="Adresse"
+                  @bind-Value="this.ViewModel.Address"
+                  CoerceValue="true"
+                  Immediate="true" />
+    </MudItem>
+</MudGrid>
