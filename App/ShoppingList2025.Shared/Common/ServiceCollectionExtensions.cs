@@ -11,6 +11,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IHomePageViewModel, HomePageViewModel>();
         services.AddScoped<IShoppingItemDetailViewModel, ShoppingItemDetailViewModel>();
+        services.AddScoped<IStoreListPageViewModel, StoreListPageViewModel>();
 
         services.AddScoped<IMapper>(provider => new MapperConfiguration(cfg => ShoppingListMapperConfiguration.CreateMapping(cfg)).CreateMapper());
 
@@ -21,6 +22,7 @@ public static class ServiceCollectionExtensions
             var navigationService = new NavigationService(aspNavigationManager, jsRuntime);
             navigationService.RegisterForNavigation<IHomePageViewModel, HomePage>();
             navigationService.RegisterForNavigation<IShoppingItemDetailViewModel, ShoppingItemDetailPage>();
+            navigationService.RegisterForNavigation<IStoreListPageViewModel, StoreListPage>();
             return navigationService;
         });
         return services;

@@ -104,5 +104,39 @@ namespace ShoppingList2025.Database
             }
             await this.localContext.SaveChangesAsync();
         }
+
+        public Task<List<IStore>> GetStoresAsync()
+        {
+            return this.localContext.Store
+                .Cast<IStore>()
+                .ToListAsync();
+        }
+
+        public async Task AddStoreAsync(IStore store)
+        {
+            await this.localContext.Store.AddAsync((Store)store);
+        }
+
+        public IStore CreateStore() => (IStore)new Store();
+
+        public void RemoveStore(IStore store)
+        {
+            this.localContext.Remove(store);
+        }
+
+        public IStore? FindStore(string name)
+        {
+            return this.localContext.Store
+                .Where(si => si.Name == name)
+                .FirstOrDefault();
+        }
+
+        public Task<IStore?> FindStoreAsync(string name)
+        {
+            return this.localContext.Store
+                .Where(si => si.Name == name)
+                .Cast<IStore>()
+                .FirstOrDefaultAsync();
+        }
     }
 }

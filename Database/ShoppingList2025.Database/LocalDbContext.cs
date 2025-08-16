@@ -14,6 +14,7 @@ namespace ShoppingList2025.Database
     internal class LocalDbContext(IPlatformSpecialFolder iSpecialFolder) : DbContext
     {
         public DbSet<ShoppingItem> ShoppingItem { get; set; }
+        public DbSet<Store> Store { get; set; }
 
         public async Task CreateOrMigrateDatabaseAsync()
         {

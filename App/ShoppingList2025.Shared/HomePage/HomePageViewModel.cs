@@ -114,4 +114,10 @@ public class HomePageViewModel(IBlazorNavigationService navigationService,
             this.isDatabaseMigrated = true;
         }
     }
+
+    public Task GotoStoreListAsync()
+    {
+        navigationService.NavigateTo<IStoreListPageViewModel>();
+        return Task.CompletedTask;
+    }
 }

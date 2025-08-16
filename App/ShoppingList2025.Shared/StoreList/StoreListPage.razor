@@ -1,0 +1,49 @@
+﻿@page "/StoreList"
+@using MudBlazor
+@using ShoppingList2025.Core.UI.Blazor
+
+@namespace ShoppingList2025.Shared
+
+@inherits BlazorViewBase<IStoreListPageViewModel>
+
+<MudToolBar>
+    <MudIconButton Icon="@Icons.Material.Outlined.ArrowBack" OnClick="this.ViewModel.GotoHomePageAsync" />
+    <MudIconButton Icon="@Icons.Material.Outlined.Add" OnClick="this.ViewModel.AddItemAsync" />
+</MudToolBar>
+
+<MudGrid Spacing="0">
+    <MudItem xs="12" Class="ma-4">
+        <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+            <MudItem xs="6" sm="3">
+                <MudItem>
+                    <MudText Typo="Typo.h6">Name</MudText>
+                </MudItem>
+            </MudItem>
+            <MudItem xs="6" sm="3">
+                <MudItem>
+                    <MudText Typo="Typo.h6">Adresse</MudText>
+                </MudItem>
+            </MudItem>
+        </MudStack>
+    </MudItem>
+</MudGrid>
+
+@foreach (var item in this.ViewModel.Items)
+{
+    <MudGrid Spacing="0">
+        <MudItem xs="12" Class="ma-4" @onclick="() => this.ViewModel.SelectItemAsync(item)">
+            <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                <MudItem xs="6" sm="3">
+                    <MudItem>
+                        <MudText Typo="Typo.body1">@item.Name</MudText>
+                    </MudItem>
+                </MudItem>
+                <MudItem xs="6" sm="3">
+                    <MudItem>
+                        <MudText Typo="Typo.body1">@item.Address</MudText>
+                    </MudItem>
+                </MudItem>
+            </MudStack>
+        </MudItem>
+    </MudGrid>
+}

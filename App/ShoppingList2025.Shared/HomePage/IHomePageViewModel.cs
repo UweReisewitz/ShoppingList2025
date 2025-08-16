@@ -12,4 +12,5 @@ public interface IHomePageViewModel : IBlazorViewModelBase
     UIShoppingItem? SelectedItem { get; set; }
     Task SetItemBoughtAsync(UIShoppingItem shoppingItem);
     Task ShoppingDoneAsync();
+    Task GotoStoreListAsync();
 }
